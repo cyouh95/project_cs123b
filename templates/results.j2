@@ -3,10 +3,28 @@
 
 <head>
     <title>HBB Gene Analysis</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>
+    <script type="text/javascript" src="/static/js/script.js" crossorigin=""></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
 </head>
 
 <body>
     <p>Download training and testing datasets <a href="{{ url_for('download') }}">here</a>.</p>
+
+    <div id="controls">
+        <div>
+            <div class="button active" data-tab="msa">Multiple Sequence Alignment</div>
+            <div class="button" data-tab="phylotree">Phylogenetic Tree</div>
+        </div>
+
+        <div id="msa" class="tab active">
+            <div class="scroll-wrapper"></div>
+        </div>
+
+        <div id="phylotree" class="tab">
+        </div>
+    </div>
 </body>
 
 </html>

@@ -2,6 +2,7 @@ from utils import format_query_string, data_dir
 import pandas as pd
 import requests
 import time
+import json
 import re
 import os
 
@@ -49,11 +50,22 @@ class HBB:
         self.save_clustalo_phylotree_results(job_id)
         self.save_clustalo_alignment_results(job_id)
 
-        # Determine best segment of alignment to keep and split sequences to training and testing datasets
+        # Determine best segment of alignment to keep
         self.alignment = self.parse_alignment()
         self.optimal_segment = self.get_optimal_alignment_segment()
 
+        # Save training and testing datasets and alignment info
         self.gen_output_files()
+
+        info = {
+            'seq_names': self.seq_names,
+            'optimal_segment': self.optimal_segment
+        }
+
+        json_object = json.dumps(info, indent=2)
+
+        with open(f'{data_dir}/dataset_info.json', mode='w') as file:
+            file.write(json_object)
 
     def create_sample_dataset(self, seq_names):
         """
@@ -112,6 +124,9 @@ class HBB:
             col = list(df.iloc[:50, pos])
             num_unique = len(set([aa for aa in col if aa != '-']))
             df.loc['num_unique', pos] = num_unique
+
+        # Save as CSV to display as MSA results
+        df.to_csv(f'{data_dir}/clustalo_alignment.csv', header=False)
 
         alignment_length = len(df.columns)
 
