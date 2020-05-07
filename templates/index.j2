@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>HBB Gene Analysis</title>
+</head>
+
+<body>
+    <h1>Upload basic and related dataset</h1>
+
+    <p>Download sample HBB datasets for the <a href="/static/data/primates_dataset.fasta" download>Primates</a> and <a href="/static/data/rodentia_dataset.fasta" download>Rodentia</a> Orders.</p>
+
+    <p>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class = "flashes">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </p>
+
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="basic_file" />
+        <input type="file" name="related_file" />
+        <input type="submit" />
+    </form>
+</body>
+
+</html>
