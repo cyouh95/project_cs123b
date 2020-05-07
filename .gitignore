@@ -1,0 +1,12 @@
+venv/
+.idea/
+__pycache__/
+.DS_Store
+
+settings.py
+.env
+*.docx
+
+static/data/*
+!static/data/primates_dataset.fasta
+!static/data/rodentia_dataset.fasta
