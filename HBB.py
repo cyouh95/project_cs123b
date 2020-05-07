@@ -1,9 +1,9 @@
 from utils import format_query_string, data_dir
 import pandas as pd
 import requests
-import settings
 import time
 import re
+import os
 
 
 clustalo_api = 'https://www.ebi.ac.uk/Tools/services/rest/clustalo'
@@ -233,7 +233,7 @@ class HBB:
         """
 
         params = {
-            'email': settings.email_address,
+            'email': os.environ['EMAIL_ADDRESS'],
             'outfmt': 'clustal',
             'sequence': dataset
         }

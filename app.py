@@ -1,13 +1,13 @@
 from flask import Flask, url_for, render_template, redirect, request, send_file, flash
 from utils import data_dir
 from HBB import HBB
-import settings
 import zipfile
 import io
+import os
 
 
 app = Flask(__name__)
-app.secret_key = settings.secret_key
+app.secret_key = os.environ['SECRET_KEY']
 
 
 @app.route('/')
