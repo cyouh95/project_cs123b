@@ -51,6 +51,64 @@ $(function() {
         return table;
     }
 
+    // Phylogenetic tree
+    function genPhyloTree(data, info) {
+        var basicNames = info.seq_names.basic_dataset;
+
+        // Create tree
+        var width = 800;
+        var height = 2000;
+
+        var svg = d3.select('#phylotree .scroll-wrapper')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+            .append('g');
+
+        // Create the cluster layout
+        var cluster = d3.cluster()
+            .size([height - 20, width - 200]);
+
+        // Give the data to this cluster layout
+        var root = d3.hierarchy(data, function (d) {
+            return d.children;
+        });
+        cluster(root);
+
+        // Add the links between nodes
+        svg.selectAll('path')
+            .data(root.descendants().slice(1))
+            .enter()
+            .append('path')
+            .attr('d', function (d) {
+                return 'M' + d.y + ',' + d.x
+                    + 'L' + d.parent.y + ',' + d.x
+                    + ' ' + d.parent.y + ',' + d.parent.x;
+            })
+            .style('fill', 'none')
+            .attr('stroke', '#ccc');
+
+        // Create nodes
+        var g = svg.selectAll('g')
+            .data(root.descendants())
+            .enter()
+            .append('g')
+            .attr('transform', function (d) {
+                return 'translate(' + d.y + ',' + d.x + ')'
+            }).filter(function(d) { return d.data.name.indexOf('|') === -1; });
+
+        // Add circles
+        g.append('circle')
+            .attr('r', 7);
+
+        // Add text
+        g.append('text')
+            .attr('dy', '0.37em')
+            .attr('x', 10)
+            .text(function(d) { return d.data.name; })
+            .attr('class', function(d) { return basicNames.indexOf(d.data.name) !== -1 ? 'basic' : 'related'; });
+    }
+
     // Get data to display
     var data = {};
     $.when(
@@ -63,9 +121,13 @@ $(function() {
         }),
         $.getJSON('static/data/dataset_info.json', function(d) {
             data.info = d;
+        }),
+        $.getJSON('static/data/clustalo_phylotree.json', function(d) {
+            data.tree = d;
         })
     ).then(function() {
         $('#msa .scroll-wrapper').append(genMSATable(data.alignment, data.info));
+        genPhyloTree(data.tree, data.info);
     });
 
 });

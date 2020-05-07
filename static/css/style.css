@@ -31,6 +31,7 @@
   max-height: 80vh;
   overflow: scroll;
   position: relative;
+  background-color: white;
 }
 
 #msa table {
@@ -74,14 +75,45 @@
   background-color: white;
 }
 
+/* Phylotree */
+
+#phylotree .scroll-wrapper {
+  overflow-x: hidden;
+}
+
+svg {
+  display: block;
+  margin: auto;
+}
+
+svg text {
+  font-size: 14px;
+}
+
+.axis text {
+  font-size: 10px
+}
+
+.axis path {
+  opacity: 0;
+}
+
+circle {
+  fill: white;
+  stroke: #485F6E;
+  stroke-width: 2;
+}
+
 /* Colors */
 
 .basic {
   color: darkorange;
+  fill: darkorange;
 }
 
 .related {
   color: cornflowerblue;
+  fill: cornflowerblue;
 }
 
 .red {

@@ -249,7 +249,17 @@ class HBB:
 
         params = {
             'email': os.environ['EMAIL_ADDRESS'],
+            'guidetreeout': 'true',
+            'dismatout': 'false',
+            'dealign': 'false',
+            'mbed': 'true',
+            'mbediteration': 'true',
+            'iterations': '0',
+            'gtiterations': '-1',
+            'hmmiterations': '-1',
             'outfmt': 'clustal',
+            'order': 'aligned',
+            'stype': 'protein',
             'sequence': dataset
         }
         data = format_query_string(params)
@@ -276,18 +286,6 @@ class HBB:
         return job_status
 
     @staticmethod
-    def save_clustalo_phylotree_results(job_id):
-        """
-        Saves phylogenetic tree results from Clustal Omega job
-        """
-
-        r = requests.get(clustalo_result_endpoint + '/' + job_id + '/phylotree')
-        phylotree_results = r.text
-
-        with open(f'{data_dir}/clustalo_phylotree.txt', mode='w') as f:
-            f.write(phylotree_results)
-
-    @staticmethod
     def save_clustalo_alignment_results(job_id):
         """
         Saves multiple sequence alignment results from Clustal Omega job
@@ -298,3 +296,61 @@ class HBB:
 
         with open(f'{data_dir}/clustalo_alignment.txt', mode='w') as f:
             f.write(alignment_results)
+
+    def save_clustalo_phylotree_results(self, job_id):
+        """
+        Saves phylogenetic tree results from Clustal Omega job
+        """
+
+        r = requests.get(clustalo_result_endpoint + '/' + job_id + '/phylotree')
+        phylotree_results = r.text
+
+        with open(f'{data_dir}/clustalo_phylotree.txt', mode='w') as f:
+            f.write(phylotree_results)
+
+        phylotree_json = {}
+
+        phylotree_json = self.get_phylotree_json(phylotree_results, phylotree_json)
+
+        json_object = json.dumps(phylotree_json, indent=2)
+
+        with open(f'{data_dir}/clustalo_phylotree.json', mode='w') as file:
+            file.write(json_object)
+
+    def get_phylotree_json(self, phylotree_results, phylotree_json):
+        """
+        Creates json version of phylotree results for dendrogram
+        """
+
+        branch_regex = '\([^\(\)]+\)'
+        leaf_regex = '([-|/\w]+)\n?:([\d.]+)'
+
+        branches = re.finditer(branch_regex, phylotree_results)
+        if not re.search(branch_regex, phylotree_results):
+            root = list(phylotree_json.keys())[0]
+            return {'name': root, 'children': phylotree_json[root]}
+
+        for branch in branches:
+            leaves = re.finditer(leaf_regex, branch.group())
+            leaf_names = []
+            children = []
+
+            for leaf in leaves:
+                leaf_name = leaf.group(1)
+                leaf_score = leaf.group(2)
+
+                leaf_names.append(leaf_name)
+
+                json_entry = {'name': leaf_name, 'score': leaf_score}
+                children.append(json_entry)
+
+                if leaf_name in phylotree_json:
+                    json_entry['children'] = phylotree_json[leaf_name]
+                    phylotree_json.pop(leaf_name)
+
+            branch_name = '|'.join(leaf_names)
+
+            phylotree_json[branch_name] = children
+            phylotree_results = phylotree_results.replace(branch.group(), branch_name)
+
+        return self.get_phylotree_json(phylotree_results, phylotree_json)
