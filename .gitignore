@@ -6,6 +6,7 @@ __pycache__/
 settings.py
 .env
 *.docx
+results/
 
 static/data/*
 !static/data/primates_dataset.fasta

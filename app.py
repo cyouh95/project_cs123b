@@ -53,5 +53,10 @@ def download():
     return send_file(data, mimetype='application/zip', as_attachment=True, attachment_filename='output.zip')
 
 
+@app.route('/favicon.ico')
+def send_favicon():
+    return send_file('favicon.ico')
+
+
 if __name__ == '__main__':
     app.run(debug=True)

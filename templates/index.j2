@@ -1,32 +1,55 @@
-<!doctype html>
-<html>
+{% extends "base.j2" %}
 
-<head>
-    <title>HBB Gene Analysis</title>
-</head>
+{% block body %}
+    <div id="main" class="content">
+        <h1>HBB Gene Analysis</h1>
 
-<body>
-    <h1>Upload basic and related dataset</h1>
+        <hr>
 
-    <p>Download sample HBB datasets for the <a href="/static/data/primates_dataset.fasta" download>Primates</a> and <a href="/static/data/rodentia_dataset.fasta" download>Rodentia</a> Orders.</p>
-
-    <p>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class = "flashes">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
+        <ol>
+            <li>Search for HBB gene in <a href="https://www.ncbi.nlm.nih.gov/genbank/" target="_blank">GenBank</a> and obtain its Protein Accession number</li>
+            <li>Enter the Protein Accession number in <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE=Proteins" target="_blank">Blastp</a> and retrieve top hits for 2 organism groups (call this the <span class="highlight">basic dataset</span> and <span class="highlight">related dataset</span>)</li>
+            <li>Download each set of sequences from the Blastp results in FASTA format</li>
+            <li>Upload both FASTA files here to:
+                <ul>
+                    <li>See multiple sequence alignment and phylogenetic tree results from <a href="https://www.ebi.ac.uk/Tools/msa/clustalo/" target="_blank">Clustal Omega</a></li>
+                    <li>Download training and testing sequences for a 100bp segment of alignment to be used for HMM analysis</li>
                 </ul>
-            {% endif %}
-        {% endwith %}
-    </p>
+            </li>
+        </ol>
 
-    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
-        <input type="file" name="basic_file" />
-        <input type="file" name="related_file" />
-        <input type="submit" />
-    </form>
-</body>
+        <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+            <div class="box">
+                <div class="left">
+                    <h3>Basic dataset</h3>
+                    <p class="footnote">(e.g., HBB gene for Primates <a href="/static/data/primates_dataset.fasta" download><i class="fa fa-download fa-fw"></i></a>)</p>
+                </div>
+                <input type="file" name="basic_file" id="basic_file" />
+            </div>
 
-</html>
+            <div class="box">
+                <div class="left">
+                    <h3>Related dataset</h3>
+                    <p class="footnote">(e.g., HBB gene for Rodentia <a href="/static/data/rodentia_dataset.fasta" download><i class="fa fa-download fa-fw"></i></a>)</p>
+                </div>
+                <input type="file" name="related_file" id="related_file" />
+            </div>
+
+            <input id="submit" type="submit" />
+        </form>
+
+        <p class="footnote error">
+            {% with messages = get_flashed_messages() %}
+                {% for message in messages %}{{ message }}{% endfor %}
+            {% endwith %}
+        </p>
+
+        <p class="loader hidden"><i class="fa fa-spinner fa-spin"></i></p>
+    </div>
+
+    <script>
+        $('#submit').on('click', function() {
+            $('.loader').removeClass('hidden');
+        });
+    </script>
+{% endblock %}

@@ -57,7 +57,7 @@ $(function() {
 
         // Create tree
         var width = 800;
-        var height = 2000;
+        var height = 1000;
 
         var svg = d3.select('#phylotree .scroll-wrapper')
             .append('svg')
@@ -97,14 +97,10 @@ $(function() {
                 return 'translate(' + d.y + ',' + d.x + ')'
             }).filter(function(d) { return d.data.name.indexOf('|') === -1; });
 
-        // Add circles
-        g.append('circle')
-            .attr('r', 7);
-
         // Add text
         g.append('text')
             .attr('dy', '0.37em')
-            .attr('x', 10)
+            .attr('x', 3)
             .text(function(d) { return d.data.name; })
             .attr('class', function(d) { return basicNames.indexOf(d.data.name) !== -1 ? 'basic' : 'related'; });
     }

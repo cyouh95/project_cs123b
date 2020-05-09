@@ -1,32 +1,49 @@
-<!doctype html>
-<html>
+{% extends "base.j2" %}
 
-<head>
-    <title>HBB Gene Analysis</title>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+{% block scripts %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script type="text/javascript" src="/static/js/script.js" crossorigin=""></script>
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
-</head>
+{% endblock %}
 
-<body>
-    <p>Download training and testing datasets <a href="{{ url_for('download') }}">here</a>.</p>
+{% block body %}
+    <div class="wrapper">
+        <div id="results">
+            <div id="tabs">
+                <div class="button active" data-tab="msa">Multiple Sequence Alignment</div>
+                <div class="button" data-tab="phylotree">Phylogenetic Tree</div>
+            </div>
 
-    <div id="controls">
-        <div>
-            <div class="button active" data-tab="msa">Multiple Sequence Alignment</div>
-            <div class="button" data-tab="phylotree">Phylogenetic Tree</div>
+            <div id="msa" class="tab active">
+                <div class="scroll-wrapper"></div>
+            </div>
+
+            <div id="phylotree" class="tab">
+                <div class="scroll-wrapper"></div>
+            </div>
         </div>
 
-        <div id="msa" class="tab active">
-            <div class="scroll-wrapper"></div>
-        </div>
-
-        <div id="phylotree" class="tab">
-            <div class="scroll-wrapper"></div>
+        <div id="info" class="content">
+            <h2>Results</h2>
+            <ul>
+                <li>Top 25 HBB sequences from both <span class="basic">basic</span> and <span class="related">related</span> input datasets are retained to create analysis sample
+                    <ul>
+                        <li>Download analysis sample <a href="/static/data/clustalo_input.fasta" download><i class="fa fa-download fa-fw"></i></a>
+                    </ul>
+                </li>
+                <li>Multiple sequence alignment and phylogenetic tree results from <a href="https://www.ebi.ac.uk/Tools/msa/clustalo/" target="_blank">Clustal Omega</a> are displayed for the analysis sample of 50 sequences</li>
+                <li>In the multiple sequence alignment results, the <span style="background-color:#eee8aa">highlighted segment of 100bp</span> is chosen to be retained for HMM analysis, as determined by:
+                    <ul>
+                        <li>Must have between 10-15% lowly conserved (defined as having 5+ unique AA) positions</li>
+                        <li>Have the highest total of lowly conserved and highly conserved (marked ":") positions</li>
+                    </ul>
+                </li>
+                <li>The 25 sequences for both <span class="basic">basic</span> and <span class="related">related</span> datasets are trimmed to retain just the 100bp segment, then split into training (80%) and testing (20%) datasets to be used for HMM analysis
+                    <ul>
+                        <li>Download training and testing datasets <a href="{{ url_for('download') }}"><i class="fa fa-download fa-fw"></i></a>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
-</body>
-
-</html>
+{% endblock %}
