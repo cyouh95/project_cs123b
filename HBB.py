@@ -165,7 +165,7 @@ class HBB:
                 optimal_segment['num_highly_conserved'] = num_highly_conserved
                 potential = '*'
 
-            print(start, num_lowly_conserved, num_highly_conserved, potential, num_highly_conserved)
+            print(start, num_lowly_conserved, num_highly_conserved, potential, num_desired_columns)
 
         print(optimal_segment)
 

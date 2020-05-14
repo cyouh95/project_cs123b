@@ -17,6 +17,9 @@ def index():
 
 @app.route('/results')
 def results():
+    if not os.path.exists(f'{data_dir}/clustalo_input.fasta'):
+        return redirect(url_for('index'))
+
     return render_template('results.j2')
 
 

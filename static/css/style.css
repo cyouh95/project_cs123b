@@ -30,7 +30,7 @@ ol li, ul li {
   margin: 5px 0;
 }
 
-ul ul li {
+li li {
     color: #444;
 }
 
@@ -168,6 +168,7 @@ ul ul li {
   padding-right: 5px;
   z-index: 1;
   font-family: Raleway, sans-serif;
+  font-size: 11px;
   white-space: nowrap;
 }
 
