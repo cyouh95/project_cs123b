@@ -36,7 +36,7 @@ $(function() {
                 // AA color scheme based on Clustal Omega
                 if (['A', 'V', 'F', 'P', 'M', 'I', 'L', 'W'].indexOf(cellData) !== -1) td += ' class="red"';
                 if (['D', 'E'].indexOf(cellData) !== -1) td += ' class="blue"';
-                if (['R', 'H', 'K'].indexOf(cellData) !== -1) td += ' class="magenta"';
+                if (['R', 'K'].indexOf(cellData) !== -1) td += ' class="magenta"';
                 if (['S', 'T', 'Y', 'H', 'C', 'N', 'G', 'Q'].indexOf(cellData) !== -1) td += ' class="green"';
 
                 // Highlight the segment of alignment that is retained (shift 1 col because row names)
