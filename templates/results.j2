@@ -32,13 +32,13 @@
                     </ul>
                 </li>
                 <li>Multiple sequence alignment and phylogenetic tree results from <a href="https://www.ebi.ac.uk/Tools/msa/clustalo/" target="_blank">Clustal Omega</a> are displayed for the analysis sample of 50 sequences</li>
-                <li>In the multiple sequence alignment results, the <span style="background-color:#eee8aa">highlighted segment of 100bp</span> is chosen to be retained for HMM analysis, as determined by:
+                <li>In the multiple sequence alignment results, the <span style="background-color:#eee8aa">highlighted segment of 100 AA</span> is chosen to be retained for HMM analysis, as determined by:
                     <ul>
                         <li>Must have between 10-15% lowly conserved (defined as having 5+ unique AA) positions</li>
                         <li>Have the highest total of lowly conserved and highly conserved (marked ":") positions</li>
                     </ul>
                 </li>
-                <li>The 25 sequences for both <span class="basic">basic</span> and <span class="related">related</span> datasets are trimmed to retain just the 100bp segment, then split into training (80%) and testing (20%) datasets to be used for HMM analysis
+                <li>The 25 sequences for both <span class="basic">basic</span> and <span class="related">related</span> datasets are trimmed to retain just the 100 AA segment, then split into training (80%) and testing (20%) datasets to be used for HMM analysis
                     <ul>
                         <li>Download training and testing datasets <a href="{{ url_for('download') }}"><i class="fa fa-download fa-fw"></i></a>
                     </ul>
