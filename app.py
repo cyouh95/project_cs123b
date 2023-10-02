@@ -53,7 +53,7 @@ def download():
 
     data.seek(0)
 
-    return send_file(data, mimetype='application/zip', as_attachment=True, attachment_filename='output.zip')
+    return send_file(data, mimetype='application/zip', as_attachment=True, download_name='output.zip')
 
 
 @app.route('/favicon.ico')
